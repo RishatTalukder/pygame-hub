@@ -1,12 +1,20 @@
 import pygame
 from sys import exit
 
+def display_score():
+    current_time = pygame.time.get_ticks()//1000-starting_time
+    score_surface = text_font.render("score: " + str(current_time),False,(103,103,103))
+    score_rect = score_surface.get_rect(center= (400,100))
+    screen.blit(score_surface,score_rect)
+
+
 pygame.init()
 
 screen = pygame.display.set_mode((800,400))
 pygame.display.set_caption('LAFALAFI')
 clock = pygame.time.Clock()
-
+game_active = True
+starting_time = 0
 #text_font = pygame.font.SysFont('Arial',22)
 text_font = pygame.font.Font('font/Pixeltype.ttf',50)
 
@@ -44,26 +52,46 @@ while True:
         #     if player_rect.collidepoint(event.pos):
         #         print("collision")
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and player_rect.bottom == 250:
-                gravity = -20
+        if game_active:
 
-        if event.type == pygame.KEYUP:
-            pass
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and player_rect.bottom == 250:
+                    gravity = -20
+
+            if event.type == pygame.KEYUP:
+                pass
+
+        else:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    game_active = True
+                    enemy_rect.left = 800
+                    starting_time = pygame.time.get_ticks()//1000
 
     # screen.blit(test_surface,(0,0))
     # screen.blit(test_surface2,(50,70))
-    screen.blit(sky_surface,(0,0))
-    screen.blit(ground_surface,(0,250))
-    gravity += 1
-    player_rect.y += gravity
-    if player_rect.bottom >= 250:
-        player_rect.bottom = 250
-    screen.blit(player_surface,player_rect)
-    screen.blit(text_surface,(350,50))
-    screen.blit(enemy_surface,enemy_rect)
-    enemy_rect.x -= 4
-    if enemy_rect.right <= 0: enemy_rect.left = 800
+    if game_active:
+
+        screen.blit(sky_surface,(0,0))
+        screen.blit(ground_surface,(0,250))
+        gravity += 1
+        player_rect.y += gravity
+        if player_rect.bottom >= 250:
+            player_rect.bottom = 250
+        screen.blit(player_surface,player_rect)
+        display_score()
+        #screen.blit(text_surface,(350,50))
+        screen.blit(enemy_surface,enemy_rect)
+        enemy_rect.x -= 4
+        if enemy_rect.right <= 0: enemy_rect.left = 800
+
+        if enemy_rect.colliderect(player_rect):
+            # pygame.quit()
+            # exit()
+           game_active = False
+
+    else:
+        screen.fill("Green") 
 
     # keys = pygame.key.get_pressed()
     # if keys[pygame.K_SPACE]:
