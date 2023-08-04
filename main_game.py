@@ -13,7 +13,7 @@ pygame.init()
 screen = pygame.display.set_mode((800,400))
 pygame.display.set_caption('LAFALAFI')
 clock = pygame.time.Clock()
-game_active = True
+game_active = False
 starting_time = 0
 #text_font = pygame.font.SysFont('Arial',22)
 text_font = pygame.font.Font('font/Pixeltype.ttf',50)
@@ -24,14 +24,30 @@ text_font = pygame.font.Font('font/Pixeltype.ttf',50)
 # test_surface2.fill('Green')
 sky_surface = pygame.image.load('graphics/Sky.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
-player_surface = pygame.image.load('graphics/Player/player_stand.png').convert_alpha()
+#player_surface = pygame.image.load('graphics/Player/player_stand.png').convert_alpha()
+player_surface = pygame.image.load('graphics/Player/player_walk_1.png').convert_alpha()
 player_rect = player_surface.get_rect(midbottom = (80,250))
+
+
+player_stand_surface = pygame.image.load('graphics/Player/player_stand.png').convert_alpha()
+
+player_stand_surface = pygame.transform.rotozoom(player_stand_surface,0,2)
+player_stand_rect = player_stand_surface.get_rect(center=(400,200))
+
+
+
+
 gravity = 0
 enemy_surface = pygame.image.load("graphics/snail/snail1.png").convert_alpha()
 enemy_rect = enemy_surface.get_rect(midbottom = (700,250))
 enemy_x_pos = 700
 
-text_surface = text_font.render("LAFALAFI",False,'Black')
+text_surface = text_font.render("LAFALAFI",False,(111,200,233))
+text_rect = text_surface.get_rect(center= (400,80))
+
+massage_text = text_font.render("PRESS SPACE TO PLAY",False,(11,200,233))
+massege_rect = massage_text.get_rect(center=(400,350))
+
 
 while True:
     for event in pygame.event.get():
@@ -91,7 +107,10 @@ while True:
            game_active = False
 
     else:
-        screen.fill("Green") 
+        screen.fill((94,103,212)) 
+        screen.blit(player_stand_surface,player_stand_rect)
+        screen.blit(text_surface,text_rect)
+        screen.blit(massage_text,massege_rect)
 
     # keys = pygame.key.get_pressed()
     # if keys[pygame.K_SPACE]:
